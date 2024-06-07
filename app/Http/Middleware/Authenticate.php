@@ -15,7 +15,7 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            abort(401, "request without valid token");
+            abort(401, "Unauthorized or invalid token");
         }
     }
 }
