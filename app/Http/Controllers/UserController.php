@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\UserRoleRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UsersPaginateRequest;
@@ -74,5 +75,17 @@ class UserController extends Controller
             Log::error($th->getMessage());
             abort(400, "Failed to delete user");
         }
+    }
+
+    public function userRole(UserRoleRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+
+        $user = $this->userService->userRole($data);
+
+        return response()->json([
+            'message' => 'User role updated',
+            'user' => $user
+        ]);
     }
 }

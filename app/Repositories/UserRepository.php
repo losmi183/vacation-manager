@@ -62,4 +62,16 @@ class UserRepository
         }
         return $user;
     }
+    public function userRole(array $data): User
+    {
+        try {
+            $user = User::find($data['user_id']);
+            $user->role_id = $data['role_id'];
+            $user->save();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(400, 'User role not updated');
+        }
+        return $user;
+    }
 }

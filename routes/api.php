@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -27,4 +28,8 @@ Route::group(['middleware' => ['auth:sanctum', 'admin'], 'prefix' => 'admin'], f
     Route::post('/user',[UserController::class,'store']);
     Route::post('/user/{id}',[UserController::class,'update']);
     Route::delete('/user/{id}',[UserController::class,'delete']);
+    
+    Route::post('/user-role',[UserController::class,'userRole']);
+
+    Route::post('/team', [TeamController::class,'store']);
 });

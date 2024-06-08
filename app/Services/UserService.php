@@ -28,4 +28,9 @@ class UserService {
         $data['password'] = bcrypt($data['password']);
         return $this->userRepository->update($data, $id);
     }
+
+    public function userRole(array $data): User 
+    {
+        return $this->userRepository->userRole($data);
+    }
 }
