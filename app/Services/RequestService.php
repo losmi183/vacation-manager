@@ -18,10 +18,23 @@ class RequestService {
         $this->userService = $userService;
     }   
 
+    public function requests(): Collection
+    {
+        $user = $this->userService->loggedUser();
+        return $this->requestRepositiry->requests($user->id);
+    }
+    public function teamRequests(): Collection
+    {
+        $user = $this->userService->loggedUser();
+        $teamUsers = $this->userService->teamUsers($user->team_id);
+        $user_ids = $teamUsers->pluck('id')->toArray();
+
+        return $this->requestRepositiry->teamRequests($user_ids);
+    }
+
     public function request(array $data): Request
     {   
         $user = $this->userService->loggedUser();
-
         
         $data['user_id'] = $user->id;
         $data['working_days'] = $this->countWorkingDays($data['date_from'], $data['date_to']);

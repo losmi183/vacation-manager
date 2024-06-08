@@ -38,4 +38,9 @@ class UserService {
     {
         return auth()->user();
     }
+
+    public function teamUsers($team_id): Collection
+    {
+        return User::where('team_id', $team_id)->get();
+    }
 }

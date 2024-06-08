@@ -24,6 +24,9 @@ return new class extends Migration
 
             $table->unsignedBigInteger('team_id')->nullable();
             $table->foreign('team_id')->references('id')->on('teams');
+            
+            $table->integer('days')->default(5);
+            $table->integer('vacation')->default(20);
 
             $table->string('password');
             $table->rememberToken();
