@@ -32,4 +32,9 @@ Route::group(['middleware' => ['auth:sanctum', 'admin'], 'prefix' => 'admin'], f
     Route::post('/user-role',[UserController::class,'userRole']);
 
     Route::post('/team', [TeamController::class,'store']);
+    Route::post('/team/assign-user', [TeamController::class,'assignUser']);
+    
+    // Assigning teams array to user 
+    Route::post('/team/manager', [TeamController::class,'teamManager']);
+
 });

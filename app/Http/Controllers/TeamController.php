@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Services\TeamService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\TeamStoreRequest;
+use App\Http\Requests\TeamManagerRequest;
+use App\Http\Requests\TeamAssignUserRequest;
 
 class TeamController extends Controller
 {
@@ -25,6 +27,27 @@ class TeamController extends Controller
         return response()->json([
             'message' => 'Team created',
             'team' => $team
+        ]);
+    }
+
+    public function assignUser(TeamAssignUserRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $user = $this->teamService->assignUser($data);
+
+        return response()->json([
+            'message' => 'User assigned to team',
+            'user' => $user
+        ]);
+    }
+    public function teamManager(TeamManagerRequest $request): JsonResponse
+    {
+        $data = $request->validated();
+        $user = $this->teamService->teamManager($data);
+
+        return response()->json([
+            'message' => 'User assigned to team',
+            'user' => $user
         ]);
     }
 }
