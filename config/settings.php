@@ -9,9 +9,9 @@ return [
         "Korisnik" => 3
     ],
     'status' => [
-        "1" => "Na čekanju",
-        "2" => "Odobren",
-        "3" => "Odbijen"
+        "Cekanje" => 1,
+        "Odobren" => 2,
+        "Odbijen" => 3,
     ],
     // Fixed non working days
     'holidays' => [

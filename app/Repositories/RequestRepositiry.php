@@ -17,9 +17,19 @@ class RequestRepositiry
     {
         return Request::where('user_id', $user_id)->get();
     }
+
+    /**
+     * teamRequests - ony requests that have status Cekanje or Odobren
+     * 
+     * @param array $user_ids - teammates ids
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function teamRequests(array $user_ids): Collection
     {
-        return Request::whereIn('user_id', $user_ids)->get();
+        $status = config('settings.status');
+        return Request::whereIn('user_id', $user_ids)
+        ->whereIn('status', [$status['Cekanje'], $status['Odobren']])
+        ->get();
     }
   
     public function create(array $data): Request

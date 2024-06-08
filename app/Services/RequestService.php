@@ -18,10 +18,15 @@ class RequestService {
         $this->userService = $userService;
     }   
 
-    public function requests(): Collection
+    public function requests(): \stdClass
     {
         $user = $this->userService->loggedUser();
-        return $this->requestRepositiry->requests($user->id);
+        
+        $userData = new \stdClass;
+        $userData->daysLeft = $user->days;
+        $userData->vacationLeft = $user->vacation;
+        $userData->daysLeftrequests = $this->requestRepositiry->requests($user->id);
+        return $userData;
     }
     public function teamRequests(): Collection
     {

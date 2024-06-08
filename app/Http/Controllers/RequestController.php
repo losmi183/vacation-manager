@@ -40,8 +40,6 @@ class RequestController extends Controller
     {
         $result = $this->requestService->teamRequests();
 
-        return response()->json([
-            'data' => $result,
-        ]);
+        return response()->json($result);
     }
 }
