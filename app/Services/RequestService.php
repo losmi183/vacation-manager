@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Request;
 use Illuminate\Support\Collection;
 use App\Repositories\TeamRepository;
@@ -56,16 +57,31 @@ class RequestService {
         return $this->requestRepositiry->create($data);
     }
 
-    public function managerTeamRequests()
+    /**
+     * managerTeamRequests - get requests for team manager
+     * multiple teams is assigned
+     * 
+     * @return array
+     */
+    public function managerTeamRequests(): array
     {
+        // Get manager teams
         $managerTeamIds = $this->teamService->managerTeamIds();
 
-        foreach ($managerTeamIds as $managerTeamId) {
-            $userInTeamIds = $this->teamRepository->userInTeamIds($managerTeamId);
-            $teamRequestsAll = $this->requestRepositiry->teamRequestsAll($userInTeamIds);
-            dd(1);
-        }
+        $allTeamsRequests = [];
 
+        // Foreach all teams
+        foreach ($managerTeamIds as $managerTeamId) {
+            // Get users in team
+            $userInTeamIds = $this->teamRepository->userInTeamIds($managerTeamId);
+            // Get team requests - request for user ids
+            $teamRequestsAll = $this->requestRepositiry->teamRequestsAll($userInTeamIds);
+            $obj = new \stdClass;
+            $obj->team_id = $managerTeamId;
+            $obj->requests = $teamRequestsAll;
+            array_push($allTeamsRequests, $obj);
+        }
+        return $allTeamsRequests;
     }
 
 
@@ -105,5 +121,48 @@ class RequestService {
         }
     
         return $carbonHolidays;
+    }
+
+    public function managerResolveRequest($id)
+    {
+        // Check if request exists and status is Cekanje
+        $status = config('settings.status');
+        $request = Request::where('id', $id)->where('status', $status['Cekanje'])->get();
+
+        if ($request->isEmpty()) {
+            abort(400, 'Not found unresolved request.');
+        }
+
+        /**
+         * Checking if manager have rights to resolve request
+         */
+        $managerTeamIds = $this->teamService->managerTeamIds();
+
+        $allManagerUsers = [];
+
+        foreach ($managerTeamIds as $managerTeamId) {
+            // Get users in team
+            $users = $this->teamRepository->userInTeamIds($managerTeamId);
+            // Add to allManagerUsers
+            $allManagerUsers = array_merge($allManagerUsers, $users);
+        }
+        // Check if user (request) is in manager team
+        if (!in_array($request->user_id, $allManagerUsers)) {
+            abort(400, 'You have no rights to resolve this request.');
+        }
+
+        /**
+         * Get other unresolved team requests
+         */
+        $user = User::find($request->user_id);
+        $usersInTeam = $this->teamRepository->userInTeamIds($user->team_id);
+
+        // Finaly all team requests
+        $teamAllRequests = $this->requestRepositiry->teamApprovedRequests($usersInTeam);
+
+
+        /**
+         * Checking dates between request and team requests
+         */
     }
 }

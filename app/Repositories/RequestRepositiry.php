@@ -37,12 +37,19 @@ class RequestRepositiry
      * 
      * @param array $user_ids
      * 
-     * @return Collection
+     * @return Collection|null
      */
-    public function teamRequestsAll(array $user_ids): Collection
+    public function teamRequestsAll(array $user_ids): ?Collection
     {
         $status = config('settings.status');
         return Request::whereIn('user_id', $user_ids)
+        ->get();
+    }
+    public function teamApprovedRequests(array $user_ids): ?Collection
+    {
+        $status = config('settings.status');
+        return Request::whereIn('user_id', $user_ids)
+        ->where('status', $status['Odobren'])
         ->get();
     }
   
@@ -55,6 +62,5 @@ class RequestRepositiry
             abort(400, "Request not created");
         }
         return $request;
-    }
-   
+    }   
 }

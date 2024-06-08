@@ -48,4 +48,11 @@ class RequestController extends Controller
         $result = $this->requestService->managerTeamRequests();
         return response()->json($result);
     }
+
+    public function managerResolveRequest($id): JsonResponse
+    {
+        $result = $this->requestService->managerResolveRequest($id);
+
+        return response()->json('$result');
+    }
 }
