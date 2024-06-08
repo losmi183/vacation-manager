@@ -10,15 +10,18 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class UserRepository
 {
-    public function users(): Collection {
+    public function users(): ?Collection {
 
-        return User::all();
-    }
+        return DB::table('users as u')
+        ->leftJoin('teams as t', 't.id', '=', 'u.team_id')
+        ->select('u.*', 't.name as team_name')
+        ->get();
+}
     public function usersPaginate(array $params): LengthAwarePaginator {
 
         $itemsPerPage = $params['itemsPerPage'];
         if ($params['itemsPerPage'] == -1) {
-            $itemsPerPage = User::count();
+            $itemsPerPage = DB::table('users')->count();
         } 
         $page = $params['itemsPerPage'] != -1 ? $params['page'] : 1;
         $search = $params['search'];
@@ -27,7 +30,9 @@ class UserRepository
             return $page;
         });
 
-        return DB::table('users')
+        return DB::table('users as u')
+        ->leftJoin('teams as t', 't.id', '=', 'u.team_id')
+        ->select('u.*', 't.name as team_name')
         ->when($search != '', function($q) use ($search) {
             return $q->where('users.name', 'like', '%'. $search .'%');
         })
