@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Request extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+
+    protected $dates = ['date_from', 'date_to'];
 }

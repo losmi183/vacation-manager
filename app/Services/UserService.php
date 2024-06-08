@@ -33,4 +33,9 @@ class UserService {
     {
         return $this->userRepository->userRole($data);
     }
+
+    public function loggedUser(): User
+    {
+        return auth()->user();
+    }
 }
