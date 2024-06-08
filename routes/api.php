@@ -24,4 +24,7 @@ Route::post('/logout',[AuthController::class,'logout'])
 Route::group(['middleware' => ['auth:sanctum', 'admin'], 'prefix' => 'admin'], function () {
     Route::get('/users',[UserController::class,'users']);
     Route::get('/users-paginate',[UserController::class,'usersPaginate']);
+    Route::post('/user',[UserController::class,'store']);
+    Route::post('/user/{id}',[UserController::class,'update']);
+    Route::delete('/user/{id}',[UserController::class,'delete']);
 });

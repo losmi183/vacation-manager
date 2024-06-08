@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -37,5 +38,28 @@ class UserRepository
             return $q->where('users.name', 'like', '%'. $search .'%');
         })
         ->paginate($itemsPerPage);
+    }
+
+    public function store(array $data): User
+    {
+        try {
+            $user = User::create($data);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(400, 'User not created');
+        }
+        return $user;
+    }
+
+    public function update(array $data, $id): User
+    {
+        try {
+            $user = User::find($id);
+            $user->update($data);
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            abort(400, 'User not created');
+        }
+        return $user;
     }
 }
