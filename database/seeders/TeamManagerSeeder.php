@@ -17,19 +17,15 @@ class TeamManagerSeeder extends Seeder
     {
         DB::table('team_manager')->insert([
             'team_id' => 1,
-            'user_id' => 4
-        ]);
-        DB::table('team_manager')->insert([
-            'team_id' => 1,
-            'user_id' => 5
+            'user_id' => 2
         ]);
         DB::table('team_manager')->insert([
             'team_id' => 2,
-            'user_id' => 6
+            'user_id' => 2
         ]);
         DB::table('team_manager')->insert([
             'team_id' => 2,
-            'user_id' => 7
+            'user_id' => 3
         ]);
     }
 }

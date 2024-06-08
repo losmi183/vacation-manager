@@ -70,5 +70,12 @@ class TeamRepository
         }
         return $user;
     }
+
+    public function userInTeamIds(int $team_id): array
+    {
+        return User::where('team_id', $team_id)
+        ->pluck('id')
+        ->toArray();
+    }
    
 }

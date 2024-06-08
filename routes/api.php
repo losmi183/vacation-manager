@@ -58,3 +58,10 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'user'], function ()
     // Team requests
     Route::get('/team/requests', [RequestController::class,'teamRequests']);
 });
+
+// Manager routes
+Route::group(['middleware' => ['auth:sanctum', 'manager'], 'prefix' => 'manager'], function () {
+    
+    // Team requests for team manager
+    Route::get('/team/requests', [RequestController::class,'managerTeamRequests']);
+});

@@ -31,6 +31,20 @@ class RequestRepositiry
         ->whereIn('status', [$status['Cekanje'], $status['Odobren']])
         ->get();
     }
+
+    /**
+     * teamRequestsAll - all requests by team
+     * 
+     * @param array $user_ids
+     * 
+     * @return Collection
+     */
+    public function teamRequestsAll(array $user_ids): Collection
+    {
+        $status = config('settings.status');
+        return Request::whereIn('user_id', $user_ids)
+        ->get();
+    }
   
     public function create(array $data): Request
     {

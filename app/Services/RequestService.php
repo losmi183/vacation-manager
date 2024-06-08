@@ -12,10 +12,19 @@ class RequestService {
 
     private RequestRepositiry $requestRepositiry;
     private UserService $userService;
+    private teamService $teamService;
+    private TeamRepository $teamRepository;
 
-    public function __construct(RequestRepositiry $requestRepositiry, UserService $userService) {
+    public function __construct(
+        RequestRepositiry $requestRepositiry,
+        TeamRepository $teamRepository, 
+        UserService $userService, 
+        TeamService $teamService,
+    ){
         $this->requestRepositiry = $requestRepositiry;
+        $this->teamRepository = $teamRepository;
         $this->userService = $userService;
+        $this->teamService = $teamService;
     }   
 
     public function requests(): \stdClass
@@ -46,6 +55,19 @@ class RequestService {
 
         return $this->requestRepositiry->create($data);
     }
+
+    public function managerTeamRequests()
+    {
+        $managerTeamIds = $this->teamService->managerTeamIds();
+
+        foreach ($managerTeamIds as $managerTeamId) {
+            $userInTeamIds = $this->teamRepository->userInTeamIds($managerTeamId);
+            $teamRequestsAll = $this->requestRepositiry->teamRequestsAll($userInTeamIds);
+            dd(1);
+        }
+
+    }
+
 
     // Count working days between two dates with Carbon library
     // Find saturday and sunday in period and not count 
