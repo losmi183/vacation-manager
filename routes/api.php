@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +20,8 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::post('/login',[AuthController::class,'login'])->name('login');
 Route::post('/logout',[AuthController::class,'logout'])
   ->middleware('auth:sanctum')->name('logout');
+
+Route::group(['middleware' => ['auth:sanctum', 'admin'], 'prefix' => 'admin'], function () {
+    Route::get('/users',[UserController::class,'users']);
+    Route::get('/users-paginate',[UserController::class,'usersPaginate']);
+});

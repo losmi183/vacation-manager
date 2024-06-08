@@ -38,6 +38,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'korisnik1',
             'email' => 'korisnik1@localhost',
+            'team_id' => 1,
             'password' => bcrypt('korisnik1'),
             'role_id' => 3
         ]);
@@ -45,6 +46,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'korisnik2',
             'email' => 'korisnik2@localhost',
+            'team_id' => 1,
             'password' => bcrypt('korisnik2'),
             'role_id' => 3
         ]);
@@ -52,6 +54,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'korisnik3',
             'email' => 'korisnik3@localhost',
+            'team_id' => 2,
             'password' => bcrypt('korisnik3'),
             'role_id' => 3
         ]);
@@ -59,6 +62,7 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'korisnik4',
             'email' => 'korisnik4@localhost',
+            'team_id' => 2,
             'password' => bcrypt('korisnik4'),
             'role_id' => 3
         ]);
