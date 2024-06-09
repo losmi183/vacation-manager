@@ -127,9 +127,9 @@ class RequestService {
     {
         // Check if request exists and status is Cekanje
         $status = config('settings.status');
-        $request = Request::where('id', $id)->where('status', $status['Cekanje'])->get();
-
-        if ($request->isEmpty()) {
+        $request = $this->requestRepositiry->getRequestWithStatus($id, $status['Cekanje']);
+        // Abort if not found
+        if (!$request) {
             abort(400, 'Not found unresolved request.');
         }
 
@@ -157,12 +157,31 @@ class RequestService {
         $user = User::find($request->user_id);
         $usersInTeam = $this->teamRepository->userInTeamIds($user->team_id);
 
-        // Finaly all team requests
-        $teamAllRequests = $this->requestRepositiry->teamApprovedRequests($usersInTeam);
+        // Finaly all team requests with status Odobren
+        $teamAllRequests = $this->requestRepositiry->teamApprovedRequests($usersInTeam, $status['Odobren']);
 
 
         /**
          * Checking dates between request and team requests
          */
+        $overlappingRequest = false;
+        $newStart = Carbon::parse($request->date_from);
+        $newEnd = Carbon::parse($request->date_to);
+        foreach ($teamAllRequests as $req) {
+            $existingStart = Carbon::parse($req->date_from);
+            $existingEnd = Carbon::parse($req->date_to);
+        
+            // Provera da li se novi period preklapa sa postojećim periodom
+            if ($newStart <= $existingEnd && $newEnd >= $existingStart) {
+                // Ako postoji preklapanje, postavljamo $overlappingRequest na $req i izlazimo iz petlje
+                $overlappingRequest = $req;
+                break;
+            }
+        }
+        
+        if ($overlappingRequest) {
+            abort(400, 'Request overlaps with request from teammate(s)');
+        }
+        dd(1);
     }
 }

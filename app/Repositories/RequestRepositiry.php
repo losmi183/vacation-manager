@@ -45,11 +45,10 @@ class RequestRepositiry
         return Request::whereIn('user_id', $user_ids)
         ->get();
     }
-    public function teamApprovedRequests(array $user_ids): ?Collection
+    public function teamApprovedRequests(array $user_ids, string $status): ?Collection
     {
-        $status = config('settings.status');
         return Request::whereIn('user_id', $user_ids)
-        ->where('status', $status['Odobren'])
+        ->where('status', $status)
         ->get();
     }
   
@@ -63,4 +62,9 @@ class RequestRepositiry
         }
         return $request;
     }   
+
+    public function getRequestWithStatus(int $id, string $status): ?Request
+    {
+        return Request::where('id', $id)->where('status', $status)->first();
+    }
 }
