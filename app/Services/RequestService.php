@@ -178,10 +178,32 @@ class RequestService {
                 break;
             }
         }
-        
+
         if ($overlappingRequest) {
             abort(400, 'Request overlaps with request from teammate(s)');
         }
-        dd(1);
+
+        // Check if $user have enough vacation days
+        if($request->type === 'days' && $user->days < $request->working_days) {
+            abort(400, 'User dont have enough days');
+        }
+        if($request->type === 'vacation' && $user->vacation < $request->working_days) {
+            abort(400, 'User dont have enough vacation');
+        }
+
+        /**
+         * Approving request
+         */
+        $request->status = $status['Odobren'];
+        $request->save();
+        if($request->type === 'days') {
+            $user->days -= $request->working_days;
+            $user->save();
+        }
+        if($request->type === 'vacation') {
+            $user->vacation -= $request->working_days;
+            $user->save();
+        }
+        return $request;
     }
 }

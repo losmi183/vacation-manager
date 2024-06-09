@@ -65,6 +65,8 @@ Route::group(['middleware' => ['auth:sanctum', 'manager'], 'prefix' => 'manager'
     // Team requests for team manager - all requests per team
     Route::get('/team/requests', [RequestController::class,'managerTeamRequests']);
 
-    // Manager resolve request
-    Route::post('/request/{id}', [RequestController::class,'managerResolveRequest']);
+    // Approve request
+    Route::post('/request-approve/{id}', [RequestController::class,'managerResolveRequest']);
+    // deny request
+    Route::post('/request-deny/{id}', [RequestController::class,'managerResolveRequest']);
 });

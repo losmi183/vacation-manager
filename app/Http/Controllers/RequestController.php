@@ -53,6 +53,9 @@ class RequestController extends Controller
     {
         $result = $this->requestService->managerResolveRequest($id);
 
-        return response()->json('$result');
+        return response()->json([
+            'message' => 'Request approved',
+            'request' => $result
+        ]);
     }
 }
