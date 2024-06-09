@@ -27,6 +27,17 @@ class RequestController extends Controller
             'request' => $result
         ]);
     }
+    public function userCancelRequest($id): JsonResponse
+    {
+        $result = $this->requestService->userCancelRequest($id);
+
+        return response()->json([
+            'message' => 'Request canceled',
+            'request' => $result
+        ]);
+    }
+
+
 
     public function requests(): JsonResponse
     {
@@ -55,6 +66,15 @@ class RequestController extends Controller
 
         return response()->json([
             'message' => 'Request approved',
+            'request' => $result
+        ]);
+    }
+    public function managerDenyRequest($id): JsonResponse
+    {
+        $result = $this->requestService->managerDenyRequest($id);
+
+        return response()->json([
+            'message' => 'Request deny',
             'request' => $result
         ]);
     }

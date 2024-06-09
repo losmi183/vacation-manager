@@ -52,6 +52,9 @@ Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'user'], function ()
     // User create request
     Route::post('/request', [RequestController::class,'request']);
     
+    // Cancel request
+    Route::post('/request-cancel/{id}', [RequestController::class,'userCancelRequest']);
+    
     // User requests
     Route::get('/requests', [RequestController::class,'requests']);
     
@@ -68,5 +71,5 @@ Route::group(['middleware' => ['auth:sanctum', 'manager'], 'prefix' => 'manager'
     // Approve request
     Route::post('/request-approve/{id}', [RequestController::class,'managerResolveRequest']);
     // deny request
-    Route::post('/request-deny/{id}', [RequestController::class,'managerResolveRequest']);
+    Route::post('/request-deny/{id}', [RequestController::class,'managerDenyRequest']);
 });

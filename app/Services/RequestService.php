@@ -57,6 +57,25 @@ class RequestService {
         return $this->requestRepositiry->create($data);
     }
 
+    public function userCancelRequest($id)
+    {
+        $status = config('settings.status');
+        $user = $this->userService->loggedUser();
+        
+        $request = Request::where('id', $id)
+        ->where('status', $status['Cekanje'])
+        ->where('user_id', $user->id)
+        ->first();
+
+        if(!$request) {
+            abort(400, 'Not found unresolved request');
+        }
+
+        $request->status = $status['Odbijen'];
+        $request->save();
+        return $request;
+    }
+
     /**
      * managerTeamRequests - get requests for team manager
      * multiple teams is assigned
@@ -205,5 +224,19 @@ class RequestService {
             $user->save();
         }
         return $request;
+    }
+
+    public function managerDenyRequest($id)
+    {
+        // Check if request exists and status is Cekanje
+        $status = config('settings.status');
+        $request = Request::where('id', $id)->first();
+        // Abort if not found
+        if (!$request) {
+            abort(400, 'Not found unresolved request.');
+        }
+        $request->status = $status['Odbijen'];
+        $request->save();
+
     }
 }
